@@ -1,0 +1,199 @@
+html
+{% extends 'base.html' %}
+
+{% block title %}{{ lesson.title }} - {{ course.title }}{% endblock %}
+
+{% block content %}
+
+
+
+
+
+
+
+                        {{ lesson.title }}
+
+
+                        {% if lesson.video_url %}
+
+
+
+                        {% endif %}
+
+
+                            {{ lesson.content|linebreaks }}
+
+
+
+
+                                 Retour au Cours
+
+
+
+
+
+
+
+
+
+
+                        Leçons
+
+
+                        {% for l in lessons %}
+
+                             {{ l.title }}
+                            {{ l.duration_minutes }} min
+
+                        {% endfor %}
+
+
+
+
+
+
+{% endblock %}
+```
+
+### Étape 6.7 : Mes cours - `templates/courses/my_courses.html`
+
+```html
+{% extends 'base.html' %}
+
+{% block title %}Mes Cours{% endblock %}
+
+{% block content %}
+
+
+         Mes Cours
+        Continuez votre apprentissage
+
+
+
+
+
+        {% if enrollments %}
+
+            {% for enrollment in enrollments %}
+
+
+
+
+                            {% if enrollment.course.thumbnail %}
+
+                            {% else %}
+
+
+
+                            {% endif %}
+
+
+
+                                {{ enrollment.course.title }}
+                                {{ enrollment.course.description|truncatewords:10 }}
+
+
+                                    Progression
+
+
+                                            {{ enrollment.progress }}%
+
+
+
+
+
+
+                                         Continuer
+
+                                    {% if enrollment.completed %}
+
+                                             Terminé
+
+                                    {% endif %}
+
+
+
+
+
+
+            {% endfor %}
+
+        {% else %}
+
+
+            Aucun cours inscrit
+            Commencez votre apprentissage en vous inscrivant à un cours
+
+                 Explorer les Cours
+
+
+        {% endif %}
+
+
+{% endblock %}
+```
+
+### Étape 6.8 : Inscription - `templates/accounts/register.html`
+
+```html
+{% extends 'base.html' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block content %}
+
+
+
+
+
+
+
+
+                            Créer un Compte
+                            Rejoignez notre communauté d'apprenants
+
+
+
+                            {% csrf_token %}
+
+
+                                     Nom d'utilisateur
+
+
+
+
+
+                                     Email
+
+
+
+
+
+                                     Mot de passe
+
+
+
+
+
+                                     Confirmer le mot de passe
+
+
+
+
+                                 S'inscrire
+
+
+
+
+
+
+                            Vous avez déjà un compte ?
+                            Connectez-vous
+
+
+
+
+
+
+
+{% endblock %}

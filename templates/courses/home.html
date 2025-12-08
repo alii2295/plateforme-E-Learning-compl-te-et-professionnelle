@@ -1,0 +1,137 @@
+html
+{% extends 'base.html' %}
+
+{% block title %}Accueil - E-Learning{% endblock %}
+
+{% block content %}
+
+
+
+        Apprenez à Votre Rythme
+        Découvrez des milliers de cours en ligne dispensés par des experts
+
+             Explorer les Cours
+
+
+
+
+
+
+
+
+
+
+                {{ total_courses }}
+                Cours Disponibles
+
+
+
+
+
+                {{ total_students }}+
+                Étudiants Inscrits
+
+
+
+
+
+                500+
+                Certificats Délivrés
+
+
+
+
+
+
+
+
+
+            Explorez par Catégorie
+
+                {% for category in categories %}
+
+
+
+
+
+
+
+                                {{ category.name }}
+                                {{ category.course_count }} cours
+
+
+
+
+                {% endfor %}
+
+
+
+
+
+
+                Cours en Vedette
+                Voir Tout
+
+
+                {% for course in featured_courses %}
+
+
+                        {% if course.thumbnail %}
+
+                        {% else %}
+
+
+
+                        {% endif %}
+
+
+                                {{ course.category.name }}
+                                {{ course.get_level_display }}
+
+                            {{ course.title }}
+                            {{ course.description|truncatewords:15 }}
+
+
+
+                                    {{ course.get_students_count }} étudiants
+
+
+
+                                    {{ course.duration_hours }}h
+
+
+
+
+                                {{ course.instructor.get_full_name|default:course.instructor.username }}
+
+
+                                Voir le Cours
+
+
+
+
+                {% endfor %}
+
+
+
+
+
+
+
+                    Prêt à Commencer ?
+                    Inscrivez-vous maintenant et accédez à des milliers de cours
+                    {% if not user.is_authenticated %}
+
+                             Créer un Compte Gratuit
+
+                    {% else %}
+
+                             Parcourir les Cours
+
+                    {% endif %}
+
+
+
+
+
+{% endblock %}

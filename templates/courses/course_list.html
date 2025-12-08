@@ -1,0 +1,116 @@
+html
+{% extends 'base.html' %}
+
+{% block title %}Tous les Cours{% endblock %}
+
+{% block content %}
+
+
+        Tous les Cours
+        Trouvez le cours parfait pour développer vos compétences
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    Toutes les catégories
+                                    {% for category in categories %}
+                                        <option value="{{ category.slug }}" {% if request.GET.category == category.slug %}selected{% endif %}>
+                                            {{ category.name }}
+
+                                    {% endfor %}
+
+
+
+
+                                    Tous les niveaux
+                                    <option value="beginner" {% if request.GET.level == 'beginner' %}selected{% endif %}>Débutant
+                                    <option value="intermediate" {% if request.GET.level == 'intermediate' %}selected{% endif %}>Intermédiaire
+                                    <option value="advanced" {% if request.GET.level == 'advanced' %}selected{% endif %}>Avancé
+
+
+
+
+                                     Filtrer
+
+
+
+
+
+
+
+
+
+
+            {% for course in courses %}
+
+
+                    {% if course.thumbnail %}
+
+                    {% else %}
+
+
+
+                    {% endif %}
+
+
+                            {{ course.category.name }}
+                            {{ course.get_level_display }}
+
+                        {{ course.title }}
+                        {{ course.description|truncatewords:15 }}
+
+                        {% if course.avg_rating %}
+
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= course.avg_rating %}
+
+                                {% else %}
+
+                                {% endif %}
+                            {% endfor %}
+                            ({{ course.avg_rating|floatformat:1 }})
+
+                        {% endif %}
+
+
+
+
+                                {{ course.student_count }} étudiants
+
+
+
+                                {{ course.duration_hours }}h
+
+
+
+
+                            Voir le Cours
+
+
+
+
+            {% empty %}
+
+
+
+                    Aucun cours trouvé
+                    Essayez de modifier vos critères de recherche.
+
+
+            {% endfor %}
+
+
+
+{% endblock %}

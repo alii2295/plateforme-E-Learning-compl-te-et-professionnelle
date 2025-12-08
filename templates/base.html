@@ -1,0 +1,277 @@
+html
+
+
+
+
+
+    {% block title %}E-Learning Platform{% endblock %}
+
+
+
+
+
+
+
+
+
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .main-content {
+            background: white;
+            min-height: calc(100vh - 200px);
+            border-radius: 30px 30px 0 0;
+            margin-top: 20px;
+            padding: 40px 0;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .card {
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .badge {
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: 500;
+        }
+
+        .hero-section {
+            padding: 80px 0;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .stats-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-card i {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stats-card h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 15px 0 5px;
+        }
+
+        .footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 60px;
+        }
+
+        .category-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 2rem;
+        }
+
+        .course-instructor {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .instructor-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .rating {
+            color: #fbbf24;
+        }
+
+
+    {% block extra_css %}{% endblock %}
+
+
+
+
+
+
+                 E-Learning
+
+
+
+
+
+
+
+                         Accueil
+
+
+                         Cours
+
+
+                    {% if user.is_authenticated %}
+
+                             Mes Cours
+
+
+
+                                 {{ user.username }}
+
+
+                                 Mon Profil
+                                 Admin
+
+                                 Déconnexion
+
+
+                    {% else %}
+
+                             Connexion
+
+
+                            Inscription
+
+                    {% endif %}
+
+
+
+
+
+
+    {% if messages %}
+
+            {% for message in messages %}
+
+                    {{ message }}
+
+
+            {% endfor %}
+
+    {% endif %}
+
+
+    {% block content %}{% endblock %}
+
+
+
+
+
+
+                     E-Learning
+                    Votre plateforme d'apprentissage en ligne pour développer vos compétences.
+
+
+                    Liens Rapides
+
+                        Tous les cours
+                        Devenir instructeur
+                        À propos
+
+
+
+                    Réseaux Sociaux
+
+
+
+
+
+
+
+
+
+
+                &copy; 2024 E-Learning Platform. Projet de fin d'études - Ingénierie.
+
+
+
+
+
+
+    {% block extra_js %}{% endblock %}

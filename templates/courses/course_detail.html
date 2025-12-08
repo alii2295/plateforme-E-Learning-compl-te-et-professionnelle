@@ -1,0 +1,201 @@
+html
+{% extends 'base.html' %}
+
+{% block title %}{{ course.title }}{% endblock %}
+
+{% block content %}
+
+
+
+
+                Accueil
+                Cours
+                {{ course.title }}
+
+
+
+
+
+
+
+
+
+
+                    {% if course.thumbnail %}
+
+                    {% else %}
+
+
+
+                    {% endif %}
+
+
+                            {{ course.category.name }}
+                            {{ course.get_level_display }}
+
+                        {{ course.title }}
+                        {{ course.description }}
+
+
+
+
+                                Instructeur: {{ course.instructor.get_full_name|default:course.instructor.username }}
+
+
+
+                                Étudiants: {{ course.get_students_count }}
+
+
+
+                                Durée: {{ course.duration_hours }} heures
+
+
+
+                        {% if not is_enrolled %}
+
+                                 S'inscrire au Cours
+
+                        {% else %}
+
+                                 Vous êtes inscrit à ce cours
+
+                        {% endif %}
+
+
+
+
+
+
+                         Contenu du Cours
+
+
+                        {% if lessons %}
+
+                                {% for lesson in lessons %}
+
+
+
+
+                                            {{ lesson.title }}
+                                            {% if lesson.is_preview %}
+                                                Aperçu Gratuit
+                                            {% endif %}
+
+                                        {{ lesson.duration_minutes }} min
+
+
+                                {% endfor %}
+
+                        {% else %}
+                            Aucune leçon disponible pour le moment.
+                        {% endif %}
+
+
+
+
+
+
+                         Commentaires
+
+
+                        {% if user.is_authenticated and is_enrolled %}
+
+                            {% csrf_token %}
+
+                                Votre Note
+
+                                    ⭐⭐⭐⭐⭐ Excellent
+                                    ⭐⭐⭐⭐ Très bien
+                                    ⭐⭐⭐ Bien
+                                    ⭐⭐ Moyen
+                                    ⭐ Faible
+
+
+
+                                Votre Commentaire
+
+
+
+                                 Publier
+
+
+                        {% endif %}
+
+
+                            {% for comment in comments %}
+
+
+
+
+                                            {{ comment.user.username }}
+
+                                                {% for i in "12345" %}
+                                                    {% if forloop.counter <= comment.rating %}
+
+                                                    {% else %}
+
+                                                    {% endif %}
+                                                {% endfor %}
+
+
+                                        {{ comment.created_at|date:"d/m/Y" }}
+
+                                    {{ comment.content }}
+
+
+                            {% empty %}
+                            Aucun commentaire pour le moment.
+                            {% endfor %}
+
+
+
+
+
+
+
+
+
+                        À propos de ce cours
+
+
+
+                                Leçons: {{ course.get_lessons_count }}
+
+
+
+                                Durée: {{ course.duration_hours }} heures
+
+
+
+                                Niveau: {{ course.get_level_display }}
+
+
+
+                                Inscrits: {{ course.get_students_count }} étudiants
+
+
+
+                                Créé: {{ course.created_at|date:"d/m/Y" }}
+
+
+
+                        {% if not is_enrolled %}
+
+                                 S'inscrire Maintenant
+
+                        {% else %}
+
+                                 Continuer l'Apprentissage
+
+                        {% endif %}
+
+
+                             Partager
+
+
+
+
+
+
+
+{% endblock %}

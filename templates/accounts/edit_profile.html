@@ -1,0 +1,78 @@
+html
+{% extends 'base.html' %}
+
+{% block title %}Modifier le Profil{% endblock %}
+
+{% block content %}
+
+
+
+
+
+
+                         Modifier mon Profil
+
+
+
+                            {% csrf_token %}
+
+
+
+                                    Prénom
+
+
+
+                                    Nom
+
+
+
+
+
+                                Email
+
+
+
+
+                                Biographie
+                                {{ profile.bio }}
+
+
+
+                                Téléphone
+
+
+
+
+                                Localisation
+
+
+
+
+                                Site Web
+
+
+
+
+                                Photo de Profil
+
+                                {% if profile.avatar %}
+
+                                {% endif %}
+
+
+
+
+                                     Enregistrer
+
+
+                                     Annuler
+
+
+
+
+
+
+
+
+
+{% endblock %}

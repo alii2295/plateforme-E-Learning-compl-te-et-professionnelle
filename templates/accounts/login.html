@@ -1,0 +1,162 @@
+html
+{% extends 'base.html' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+
+
+
+
+
+
+
+
+                            Connexion
+                            Bienvenue ! Connectez-vous à votre compte
+
+
+
+                            {% csrf_token %}
+
+
+                                     Nom d'utilisateur
+
+
+
+
+
+                                     Mot de passe
+
+
+
+
+                                 Se Connecter
+
+
+
+
+
+
+                            Pas encore de compte ?
+                            Inscrivez-vous
+
+
+
+
+
+
+
+{% endblock %}
+```
+
+### Étape 6.10 : Profil - `templates/accounts/profile.html`
+
+```html
+{% extends 'base.html' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block content %}
+
+
+
+
+                {% if profile.avatar %}
+
+                {% else %}
+
+                {% endif %}
+
+
+                {{ user.get_full_name|default:user.username }}
+                Membre depuis {{ user.date_joined|date:"F Y" }}
+
+                     Modifier le Profil
+
+
+
+
+
+
+
+
+
+
+
+
+                        Informations Personnelles
+
+                         Email:{{ user.email }}
+                        {% if profile.phone %}
+                         Téléphone:{{ profile.phone }}
+                        {% endif %}
+                        {% if profile.location %}
+                         Localisation:{{ profile.location }}
+                        {% endif %}
+                        {% if profile.website %}
+                         Site Web:{{ profile.website }}
+                        {% endif %}
+
+
+
+
+
+                        Statistiques
+
+
+                             Cours inscrits
+                            {{ enrollments.count }}
+
+
+                             Cours terminés
+                            {{ enrollments|length }}
+
+
+
+
+
+
+
+
+                        Mes Cours
+
+
+                        {% if enrollments %}
+
+                            {% for enrollment in enrollments %}
+
+
+                                    {{ enrollment.course.title }}
+                                    {{ enrollment.course.category.name }}
+
+
+
+                                        {{ enrollment.progress }}%
+
+
+
+                                    Inscrit le {{ enrollment.enrolled_at|date:"d/m/Y" }}
+
+                                        Continuer
+
+
+
+                            {% endfor %}
+
+                        {% else %}
+
+
+                            Vous n'êtes inscrit à aucun cours
+
+                                Explorer les Cours
+
+
+                        {% endif %}
+
+
+
+
+
+
+{% endblock %}
