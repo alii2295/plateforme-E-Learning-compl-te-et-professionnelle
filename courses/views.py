@@ -125,3 +125,99 @@ def my_courses(request):
         'enrollments': enrollments,
     }
     return render(request, 'courses/my_courses.html', context)
+
+
+@login_required
+def create_course(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        category_id = request.POST.get('category')
+        level = request.POST.get('level', 'beginner')
+        duration_hours = request.POST.get('duration_hours', 0)
+        price = request.POST.get('price', 0)
+        thumbnail = request.FILES.get('thumbnail')
+
+        try:
+            category = Category.objects.get(id=category_id)
+            course = Course.objects.create(
+                title=title,
+                description=description,
+                category=category,
+                instructor=request.user,
+                level=level,
+                duration_hours=duration_hours,
+                price=price,
+                thumbnail=thumbnail,
+            )
+            messages.success(request, f'Cours "{course.title}" créé avec succès!')
+            return redirect('edit_course', slug=course.slug)
+        except Exception as e:
+            messages.error(request, f'Erreur lors de la création: {str(e)}')
+
+    categories = Category.objects.all()
+    context = {
+        'categories': categories,
+    }
+    return render(request, 'courses/create_course.html', context)
+
+
+@login_required
+def edit_course(request, slug):
+    course = get_object_or_404(Course, slug=slug, instructor=request.user)
+
+    if request.method == 'POST':
+        course.title = request.POST.get('title', course.title)
+        course.description = request.POST.get('description', course.description)
+        course.level = request.POST.get('level', course.level)
+        course.duration_hours = request.POST.get('duration_hours', course.duration_hours)
+        course.price = request.POST.get('price', course.price)
+
+        category_id = request.POST.get('category')
+        if category_id:
+            course.category_id = category_id
+
+        if 'thumbnail' in request.FILES:
+            course.thumbnail = request.FILES['thumbnail']
+
+        if 'is_published' in request.POST:
+            course.is_published = True
+        else:
+            course.is_published = False
+
+        course.save()
+        messages.success(request, f'Cours "{course.title}" mis à jour avec succès!')
+        return redirect('edit_course', slug=course.slug)
+
+    categories = Category.objects.all()
+    context = {
+        'course': course,
+        'categories': categories,
+    }
+    return render(request, 'courses/edit_course.html', context)
+
+
+@login_required
+def delete_course(request, slug):
+    course = get_object_or_404(Course, slug=slug, instructor=request.user)
+
+    if request.method == 'POST':
+        course_title = course.title
+        course.delete()
+        messages.success(request, f'Cours "{course_title}" supprimé avec succès!')
+        return redirect('instructor_courses')
+
+    context = {
+        'course': course,
+    }
+    return render(request, 'courses/delete_course.html', context)
+
+
+@login_required
+def instructor_courses(request):
+    courses = Course.objects.filter(instructor=request.user)
+
+    context = {
+        'courses': courses,
+    }
+    return render(request, 'courses/instructor_courses.html', context)

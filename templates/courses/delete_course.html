@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+
+{% block title %}Supprimer - {{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="container delete-course">
+    <div class="delete-container">
+        <div class="delete-icon">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="40" cy="40" r="39" stroke="#ef4444" stroke-width="2"/>
+                <path d="M40 24v32M24 40h32" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+        </div>
+
+        <h1>Supprimer ce cours ?</h1>
+        <p class="warning-text">Cette action est irréversible</p>
+
+        <div class="course-preview">
+            <h3>{{ course.title }}</h3>
+            {% if course.thumbnail %}
+                <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}">
+            {% endif %}
+            <p>{{ course.description|truncatewords:20 }}</p>
+            
+            <div class="delete-stats">
+                <div class="stat">
+                    <span class="stat-label">Étudiants inscrits</span>
+                    <span class="stat-value">{{ course.get_students_count }}</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Leçons</span>
+                    <span class="stat-value">{{ course.get_lessons_count }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <strong>Attention:</strong>
+            <ul>
+                <li>Tous les commentaires seront supprimés</li>
+                <li>Tous les inscriptions seront annulées</li>
+                <li>Cette action ne peut pas être annulée</li>
+            </ul>
+        </div>
+
+        <div class="delete-actions">
+            <a href="/instructor/courses/" class="btn btn-secondary">Annuler</a>
+            <form method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Oui, supprimer définitivement</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .delete-course {
+        max-width: 600px;
+        margin: 60px auto;
+    }
+
+    .delete-container {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .delete-icon {
+        margin-bottom: 20px;
+    }
+
+    .delete-container h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #ef4444;
+        margin-bottom: 10px;
+    }
+
+    .warning-text {
+        color: #666;
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+    }
+
+    .course-preview {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 30px;
+        margin: 30px 0;
+        text-align: left;
+    }
+
+    .course-preview h3 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    .course-preview img {
+        width: 100%;
+        max-height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+
+    .course-preview p {
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    .delete-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .delete-stats .stat {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .stat-label {
+        display: block;
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 5px;
+    }
+
+    .stat-value {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #667eea;
+    }
+
+    .warning-box {
+        background: #fef2f2;
+        border-left: 4px solid #ef4444;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 30px 0;
+        text-align: left;
+    }
+
+    .warning-box strong {
+        color: #ef4444;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .warning-box ul {
+        list-style: none;
+        padding: 0;
+        color: #666;
+    }
+
+    .warning-box li {
+        padding: 5px 0;
+        padding-left: 25px;
+        position: relative;
+    }
+
+    .warning-box li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #ef4444;
+        font-weight: bold;
+    }
+
+    .delete-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 12px 30px;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-secondary {
+        background: #f0f0f0;
+        color: #333;
+    }
+
+    .btn-secondary:hover {
+        background: #e0e0e0;
+    }
+
+    .btn-danger {
+        background: #ef4444;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background: #dc2626;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
+    }
+
+    @media (max-width: 600px) {
+        .delete-container {
+            padding: 20px;
+        }
+
+        .delete-actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+        }
+
+        .delete-stats {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}

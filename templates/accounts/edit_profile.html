@@ -1,78 +1,30 @@
-html
 {% extends 'base.html' %}
 
 {% block title %}Modifier le Profil{% endblock %}
 
 {% block content %}
+<div class="container profile-edit">
+    <h1>Modifier le Profil</h1>
 
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Email</label>
+            {{ form.email }}
+        </div>
 
+        <div class="form-group">
+            <label>Prénom</label>
+            {{ form.first_name }}
+        </div>
 
+        <div class="form-group">
+            <label>Nom</label>
+            {{ form.last_name }}
+        </div>
 
-
-
-                         Modifier mon Profil
-
-
-
-                            {% csrf_token %}
-
-
-
-                                    Prénom
-
-
-
-                                    Nom
-
-
-
-
-
-                                Email
-
-
-
-
-                                Biographie
-                                {{ profile.bio }}
-
-
-
-                                Téléphone
-
-
-
-
-                                Localisation
-
-
-
-
-                                Site Web
-
-
-
-
-                                Photo de Profil
-
-                                {% if profile.avatar %}
-
-                                {% endif %}
-
-
-
-
-                                     Enregistrer
-
-
-                                     Annuler
-
-
-
-
-
-
-
-
-
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <a href="/accounts/profile/" class="btn btn-secondary">Annuler</a>
+    </form>
+</div>
 {% endblock %}

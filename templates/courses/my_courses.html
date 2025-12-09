@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Mes Cours{% endblock %}
+
+{% block content %}
+<div class="container my-courses">
+  <h1>Mes Cours</h1>
+  <p>Continuez votre apprentissage</p>
+
+  {% if enrollments %}
+    <div class="courses-list">
+      {% for enrollment in enrollments %}
+        <div class="course-card">
+          {% if enrollment.course.thumbnail %}
+            <img src="{{ enrollment.course.thumbnail.url }}" alt="{{ enrollment.course.title }}">
+          {% endif %}
+          <h3>{{ enrollment.course.title }}</h3>
+          <p>{{ enrollment.course.description|truncatewords:10 }}</p>
+          <p>Progression: {{ enrollment.progress }}%</p>
+          {% if enrollment.completed %}<span class="badge">Terminé</span>{% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Aucun cours inscrit. Commencez votre apprentissage en vous inscrivant à un cours.</p>
+    <a class="btn btn-primary" href="/courses/">Explorer les Cours</a>
+  {% endif %}
+</div>
+{% endblock %}

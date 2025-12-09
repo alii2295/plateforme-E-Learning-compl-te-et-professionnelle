@@ -1,19 +1,12 @@
-html
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}E-Learning Platform{% endblock %}</title>
+    {% load static %}
 
-
-
-
-
-    {% block title %}E-Learning Platform{% endblock %}
-
-
-
-
-
-
-
-
-
+    <style>
         :root {
             --primary-color: #6366f1;
             --secondary-color: #8b5cf6;
@@ -173,105 +166,62 @@ html
         .rating {
             color: #fbbf24;
         }
-
+    </style>
 
     {% block extra_css %}{% endblock %}
+</head>
+<body>
 
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a class="navbar-brand" href="/">E-Learning</a>
+                <ul class="nav">
+                    <li><a href="/">Accueil</a></li>
+                    <li><a href="/courses/">Cours</a></li>
+                </ul>
 
-
-
-
-
-                 E-Learning
-
-
-
-
-
-
-
-                         Accueil
-
-
-                         Cours
-
-
+                <div class="nav-auth">
                     {% if user.is_authenticated %}
-
-                             Mes Cours
-
-
-
-                                 {{ user.username }}
-
-
-                                 Mon Profil
-                                 Admin
-
-                                 Déconnexion
-
-
+                        <a href="/my-courses/">Mes Cours</a>
+                        <a href="/instructor/courses/">Mes Cours (Prof)</a>
+                        <a href="/course/create/">+ Créer</a>
+                        <span>{{ user.username }}</span>
+                        <a href="/accounts/profile/">Mon Profil</a>
+                        <a href="/admin/">Admin</a>
+                        <a href="/accounts/logout/">Déconnexion</a>
                     {% else %}
-
-                             Connexion
-
-
-                            Inscription
-
+                        <a href="/accounts/login/">Connexion</a>
+                        <a href="/accounts/register/">Inscription</a>
                     {% endif %}
+                </div>
+            </div>
+        </nav>
+    </header>
 
-
-
-
-
-
-    {% if messages %}
-
+    <main class="main-content container">
+        {% if messages %}
             {% for message in messages %}
-
-                    {{ message }}
-
-
+                <div class="alert">{{ message }}</div>
             {% endfor %}
+        {% endif %}
 
-    {% endif %}
+        {% block content %}{% endblock %}
+    </main>
 
-
-    {% block content %}{% endblock %}
-
-
-
-
-
-
-                     E-Learning
-                    Votre plateforme d'apprentissage en ligne pour développer vos compétences.
-
-
-                    Liens Rapides
-
-                        Tous les cours
-                        Devenir instructeur
-                        À propos
-
-
-
-                    Réseaux Sociaux
-
-
-
-
-
-
-
-
-
-
-                &copy; 2024 E-Learning Platform. Projet de fin d'études - Ingénierie.
-
-
-
-
-
+    <footer class="footer">
+        <div class="container">
+            <h4>E-Learning</h4>
+            <p>Votre plateforme d'apprentissage en ligne pour développer vos compétences.</p>
+            <div class="footer-links">
+                <a href="/courses/">Tous les cours</a>
+                <a href="/become-instructor/">Devenir instructeur</a>
+                <a href="/about/">À propos</a>
+            </div>
+            <p>&copy; 2024 E-Learning Platform. Projet de fin d'études - Ingénierie.</p>
+        </div>
+    </footer>
 
     {% block extra_js %}{% endblock %}
+</body>
+</html>

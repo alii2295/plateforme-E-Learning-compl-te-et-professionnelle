@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block content %}
+<div class="container profile-page">
+    <h1>Mon Profil</h1>
+
+    <div class="profile-card">
+        <h2>{{ user.get_full_name|default:user.username }}</h2>
+        <p>Membre depuis {{ user.date_joined|date:"F Y" }}</p>
+
+        <a href="/accounts/profile/edit/" class="btn btn-primary">Modifier le Profil</a>
+    </div>
+
+    <div class="profile-info">
+        <h3>Informations Personnelles</h3>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Nom d'utilisateur:</strong> {{ user.username }}</p>
+    </div>
+
+    <div class="profile-courses">
+        <h3>Mes Cours</h3>
+
+        {% if enrollments %}
+            <div class="courses-list">
+                {% for enrollment in enrollments %}
+                    <div class="course-card">
+                        <h4>{{ enrollment.course.title }}</h4>
+                        <p>{{ enrollment.course.description|truncatewords:10 }}</p>
+                        <p>Progression: {{ enrollment.progress }}%</p>
+                        {% if enrollment.completed %}
+                            <span class="badge">Terminé</span>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Vous n'êtes inscrit à aucun cours.</p>
+            <a href="/courses/" class="btn btn-secondary">Explorer les Cours</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

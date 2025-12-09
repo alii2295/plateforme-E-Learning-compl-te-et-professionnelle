@@ -1,0 +1,379 @@
+{% extends 'base.html' %}
+
+{% block title %}Mes Cours - Instructeur{% endblock %}
+
+{% block content %}
+<div class="container instructor-dashboard">
+    <div class="dashboard-header">
+        <div class="header-content">
+            <h1>Mes Cours</h1>
+            <p>Gérez vos cours et suivez vos étudiants</p>
+        </div>
+        <a href="/course/create/" class="btn btn-primary btn-lg">
+            <span class="plus-icon">+</span> Créer un Cours
+        </a>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    {% if courses %}
+        <div class="courses-grid">
+            {% for course in courses %}
+                <div class="course-item">
+                    <div class="course-image">
+                        {% if course.thumbnail %}
+                            <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}">
+                        {% else %}
+                            <div class="placeholder">
+                                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                </svg>
+                            </div>
+                        {% endif %}
+                        <div class="course-overlay">
+                            <span class="status {% if course.is_published %}published{% else %}draft{% endif %}">
+                                {% if course.is_published %}Publié{% else %}Brouillon{% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="course-info">
+                        <h3>{{ course.title }}</h3>
+                        <p class="description">{{ course.description|truncatewords:15 }}</p>
+
+                        <div class="course-meta">
+                            <div class="meta-item">
+                                <span class="label">Niveau</span>
+                                <span class="value">
+                                    {% if course.level == 'beginner' %}Débutant
+                                    {% elif course.level == 'intermediate' %}Intermédiaire
+                                    {% else %}Avancé{% endif %}
+                                </span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="label">Étudiants</span>
+                                <span class="value">{{ course.get_students_count }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="label">Leçons</span>
+                                <span class="value">{{ course.get_lessons_count }}</span>
+                            </div>
+                        </div>
+
+                        <div class="course-footer">
+                            <span class="price">{% if course.price %}{{ course.price }}€{% else %}Gratuit{% endif %}</span>
+                            <div class="course-actions">
+                                <a href="/course/{{ course.slug }}/" class="action-btn view" title="Voir">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </a>
+                                <a href="/course/{{ course.slug }}/edit/" class="action-btn edit" title="Modifier">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                    </svg>
+                                </a>
+                                <a href="/course/{{ course.slug }}/delete/" class="action-btn delete" title="Supprimer">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+            </div>
+            <h2>Aucun cours créé</h2>
+            <p>Commencez à partager votre expertise en créant votre premier cours</p>
+            <a href="/course/create/" class="btn btn-primary">Créer mon Premier Cours</a>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+    .instructor-dashboard {
+        padding: 40px 0;
+    }
+
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .header-content h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .header-content p {
+        font-size: 1.1rem;
+        color: #666;
+    }
+
+    .btn-lg {
+        padding: 14px 40px;
+        font-size: 1.05rem;
+    }
+
+    .plus-icon {
+        margin-right: 8px;
+        font-weight: bold;
+    }
+
+    .courses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 30px;
+        margin-top: 30px;
+    }
+
+    .course-item {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .course-item:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .course-image {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+        background: #f0f0f0;
+    }
+
+    .course-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ccc;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        opacity: 0.1;
+    }
+
+    .course-overlay {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 10px 15px;
+    }
+
+    .status {
+        display: inline-block;
+        padding: 6px 15px;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .status.published {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status.draft {
+        background: #fef08a;
+        color: #854d0e;
+    }
+
+    .course-info {
+        padding: 20px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .course-info h3 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .description {
+        font-size: 0.95rem;
+        color: #666;
+        margin-bottom: 15px;
+        flex: 1;
+    }
+
+    .course-meta {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        padding: 15px 0;
+        border-top: 1px solid #f0f0f0;
+        border-bottom: 1px solid #f0f0f0;
+        margin-bottom: 15px;
+    }
+
+    .meta-item {
+        text-align: center;
+    }
+
+    .meta-item .label {
+        display: block;
+        font-size: 0.85rem;
+        color: #999;
+        margin-bottom: 5px;
+    }
+
+    .meta-item .value {
+        display: block;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #667eea;
+    }
+
+    .course-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .price {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .course-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .action-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+        text-decoration: none;
+    }
+
+    .action-btn.view {
+        background: #e0f2fe;
+        color: #0369a1;
+    }
+
+    .action-btn.view:hover {
+        background: #0369a1;
+        color: white;
+    }
+
+    .action-btn.edit {
+        background: #fef3c7;
+        color: #d97706;
+    }
+
+    .action-btn.edit:hover {
+        background: #d97706;
+        color: white;
+    }
+
+    .action-btn.delete {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .action-btn.delete:hover {
+        background: #dc2626;
+        color: white;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .empty-icon {
+        color: #d1d5db;
+        margin-bottom: 20px;
+    }
+
+    .empty-state h2 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .empty-state p {
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 30px;
+    }
+
+    @media (max-width: 900px) {
+        .courses-grid {
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        }
+
+        .dashboard-header {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .btn-lg {
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .courses-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .header-content h1 {
+            font-size: 2rem;
+        }
+    }
+</style>
+{% endblock %}
